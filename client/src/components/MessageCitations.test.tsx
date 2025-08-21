@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import React from 'react'
 // Re-import the component via a minimal wrapper to avoid deep pathing; test its behavior
 
 function MessageCitations({ content }: { content: string }) {

@@ -45,5 +45,14 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "moduleResolution": "node10",
-  }
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tests",
+    "jest.config.ts"
+  ]
 }

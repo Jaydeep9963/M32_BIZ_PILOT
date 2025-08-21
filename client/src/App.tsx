@@ -494,7 +494,7 @@ function Home() {
 }
 
 export default function App() {
-  const [dark, setDark] = useState<boolean>(() => {
+  const [dark] = useState<boolean>(() => {
     const saved = localStorage.getItem('theme')
     if (saved) return saved === 'dark'
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches

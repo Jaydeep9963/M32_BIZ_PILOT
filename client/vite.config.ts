@@ -12,6 +12,8 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
+      // Vitest v3 uses thresholds via CLI or config.coverage.thresholds
+      thresholds: { lines: 90, functions: 90, branches: 90, statements: 90 },
       all: false,
       include: ['src/**/*.{ts,tsx}'],
       exclude: [
@@ -21,10 +23,6 @@ export default defineConfig({
         'src/assets/**',
         '**/*.d.ts'
       ],
-      statements: 90,
-      branches: 90,
-      functions: 90,
-      lines: 90,
     },
   },
 })
