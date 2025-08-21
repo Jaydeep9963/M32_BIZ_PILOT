@@ -30,6 +30,7 @@ jobs:
           rsync -az --delete \
             --exclude 'node_modules' --exclude '**/node_modules' \
             --exclude '.git' --exclude '**/dist' --exclude '**/coverage' \
+            --exclude 'server/.env' \
             ./ ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_HOST }}:${{ secrets.APP_DIR }}/
 
       - name: Build & restart on droplet
