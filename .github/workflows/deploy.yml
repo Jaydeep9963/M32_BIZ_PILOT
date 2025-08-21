@@ -42,14 +42,15 @@ jobs:
             echo "[Deploy] Using APP_DIR=$APP_DIR"
 
             cd "$APP_DIR/server"
-            npm ci --omit=dev
+            npm ci
             npm run build
+            npm prune --production || true
             pm2 start dist/index.js --name bizpilot-server --update-env || pm2 restart bizpilot-server --update-env
             pm2 save
 
             cd "$APP_DIR/client"
             if [ -n "$VITE_API_URL" ]; then echo "VITE_API_URL=$VITE_API_URL" > .env.production; fi
-            npm ci --omit=dev
+            npm ci
             npm run build
             mkdir -p /var/www/bizpilot-client
             cp -r dist/* /var/www/bizpilot-client/
