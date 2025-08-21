@@ -57,6 +57,20 @@
   background: linear-gradient(180deg, var(--bg-gradient-start), var(--bg-gradient-end));
   color: var(--text-primary);
 }
+
+/* Home hero background */
+.hero {
+  background:
+    radial-gradient(1000px 600px at 15% -10%, rgba(96,165,250,0.18), transparent 60%),
+    radial-gradient(1000px 600px at 85% 110%, rgba(167,139,250,0.18), transparent 60%);
+}
+
+.hero-card {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
 .msg {
   border-radius: 12px;
   padding: 12px 14px;

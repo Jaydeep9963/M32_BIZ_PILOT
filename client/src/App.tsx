@@ -44,23 +44,25 @@ function Signup() {
     if (res.ok) { login(data.token, data.user); nav('/chat') } else alert(data.error?.message || 'Signup failed')
   }
   return (
-    <div className="max-w-md mx-auto p-4 md:mt-12">
-      <h2 className="text-2xl font-semibold mb-4 text-zinc-900 dark:text-zinc-100">Create account</h2>
-      <form onSubmit={onSubmit} className="flex flex-col gap-3">
-        <input className={`input-base ${errors.name? 'input-error':''}`} placeholder="Name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} />
-        {errors.name && <div className="error-text">{errors.name}</div>}
-        <input className={`input-base ${errors.email? 'input-error':''}`} placeholder="Email" type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} />
-        {errors.email && <div className="error-text">{errors.email}</div>}
-        <input className={`input-base ${errors.password? 'input-error':''}`} placeholder="Password" type="password" value={form.password} onChange={e=>setForm({...form,password:e.target.value})} />
-        {errors.password && <div className="error-text">{errors.password}</div>}
-        <button className="px-4 py-2 rounded border border-zinc-300 dark:border-zinc-700 bg-zinc-100 hover:bg-zinc-200 dark:bg-transparent dark:hover:bg-zinc-800 transition text-zinc-900 dark:text-zinc-100" type="submit">Sign up</button>
-      </form>
-      <div className="mt-3">
-        <a href={`${API_BASE}/auth/google`}>
-          <button className="w-full px-4 py-2 rounded border border-zinc-300 dark:border-zinc-700 bg-zinc-100 hover:bg-zinc-200 dark:bg-transparent dark:hover:bg-zinc-800 transition text-zinc-900 dark:text-zinc-100">Continue with Google</button>
-        </a>
+    <div className="min-h-screen flex items-center justify-center hero">
+      <div className="w-full max-w-lg p-8 hero-card">
+        <h2 className="text-3xl font-semibold mb-4" style={{color:'var(--text-primary)'}}>Create account</h2>
+        <form onSubmit={onSubmit} className="flex flex-col gap-3">
+          <input className={`input-base ${errors.name? 'input-error':''}`} placeholder="Name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} />
+          {errors.name && <div className="error-text">{errors.name}</div>}
+          <input className={`input-base ${errors.email? 'input-error':''}`} placeholder="Email" type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} />
+          {errors.email && <div className="error-text">{errors.email}</div>}
+          <input className={`input-base ${errors.password? 'input-error':''}`} placeholder="Password" type="password" value={form.password} onChange={e=>setForm({...form,password:e.target.value})} />
+          {errors.password && <div className="error-text">{errors.password}</div>}
+          <button className="px-4 py-2 rounded btn-primary" type="submit">Sign up</button>
+        </form>
+        <div className="mt-3">
+          <a href={`${API_BASE}/auth/google`}>
+            <button className="w-full px-4 py-2 rounded border" style={{borderColor:'var(--panel-border)', color:'var(--text-primary)'}}>Continue with Google</button>
+          </a>
+        </div>
+        <p className="mt-3 text-sm opacity-80" style={{color:'var(--text-primary)'}}>Already have an account? <Link className="text-blue-700 hover:text-blue-600" to="/login">Log in</Link></p>
       </div>
-      <p className="mt-3 text-sm text-zinc-700 dark:text-zinc-300">Already have an account? <Link className="text-blue-700 hover:text-blue-600 dark:text-blue-400" to="/login">Log in</Link></p>
     </div>
   )
 }
@@ -82,21 +84,23 @@ function Login() {
     if (res.ok) { login(data.token, data.user); nav('/chat') } else alert(data.error?.message || 'Login failed')
   }
   return (
-    <div className="max-w-md mx-auto p-4 md:mt-12">
-      <h2 className="text-2xl font-semibold mb-4 text-zinc-900 dark:text-zinc-100">Log in</h2>
-      <form onSubmit={onSubmit} className="flex flex-col gap-3">
-        <input className={`input-base ${errors.email? 'input-error':''}`} placeholder="Email" type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} />
-        {errors.email && <div className="error-text">{errors.email}</div>}
-        <input className={`input-base ${errors.password? 'input-error':''}`} placeholder="Password" type="password" value={form.password} onChange={e=>setForm({...form,password:e.target.value})} />
-        {errors.password && <div className="error-text">{errors.password}</div>}
-        <button className="px-4 py-2 rounded border border-zinc-300 dark:border-zinc-700 bg-zinc-100 hover:bg-zinc-200 dark:bg-transparent dark:hover:bg-zinc-800 transition text-zinc-900 dark:text-zinc-100" type="submit">Log in</button>
-      </form>
-      <div className="mt-3">
-        <a href={`${API_BASE}/auth/google`}>
-          <button className="w-full px-4 py-2 rounded border border-zinc-300 dark:border-zinc-700 bg-zinc-100 hover:bg-zinc-200 dark:bg-transparent dark:hover:bg-zinc-800 transition text-zinc-900 dark:text-zinc-100">Continue with Google</button>
-        </a>
+    <div className="min-h-screen flex items-center justify-center hero">
+      <div className="w-full max-w-lg p-8 hero-card">
+        <h2 className="text-3xl font-semibold mb-4" style={{color:'var(--text-primary)'}}>Log in</h2>
+        <form onSubmit={onSubmit} className="flex flex-col gap-3">
+          <input className={`input-base ${errors.email? 'input-error':''}`} placeholder="Email" type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} />
+          {errors.email && <div className="error-text">{errors.email}</div>}
+          <input className={`input-base ${errors.password? 'input-error':''}`} placeholder="Password" type="password" value={form.password} onChange={e=>setForm({...form,password:e.target.value})} />
+          {errors.password && <div className="error-text">{errors.password}</div>}
+          <button className="px-4 py-2 rounded btn-primary" type="submit">Log in</button>
+        </form>
+        <div className="mt-3">
+          <a href={`${API_BASE}/auth/google`}>
+            <button className="w-full px-4 py-2 rounded border" style={{borderColor:'var(--panel-border)', color:'var(--text-primary)'}}>Continue with Google</button>
+          </a>
+        </div>
+        <p className="mt-3 text-sm opacity-80" style={{color:'var(--text-primary)'}}>No account? <Link className="text-blue-700 hover:text-blue-600" to="/signup">Sign up</Link></p>
       </div>
-      <p className="mt-3 text-sm text-zinc-700 dark:text-zinc-300">No account? <Link className="text-blue-700 hover:text-blue-600 dark:text-blue-400" to="/signup">Sign up</Link></p>
     </div>
   )
 }
@@ -482,12 +486,14 @@ function Chat() {
 
 function Home() {
   return (
-    <div className="max-w-xl mx-auto p-4 md:mt-16 text-center">
-      <h1 className="text-3xl font-bold text-zinc-100">BizPilot</h1>
-      <p className="mt-2 text-sm text-zinc-300">Your AI business copilot for SMB owners.</p>
-      <div className="mt-4 flex gap-3 justify-center">
-        <Link to="/signup"><button className="px-4 py-2 rounded border border-blue-600 bg-blue-600 hover:bg-blue-500 transition text-white">Get Started</button></Link>
-        <Link to="/login"><button className="px-4 py-2 rounded border border-zinc-700 hover:bg-zinc-800 transition text-zinc-100">Log in</button></Link>
+    <div className="min-h-screen flex items-center justify-center hero">
+      <div className="max-w-2xl p-8 text-center hero-card">
+        <h1 className="text-4xl md:text-5xl font-bold" style={{color:'var(--text-primary)'}}>BizPilot</h1>
+        <p className="mt-3 text-base md:text-lg opacity-80" style={{color:'var(--text-primary)'}}>Your AI business copilot for SMB owners.</p>
+        <div className="mt-8 flex gap-4 justify-center">
+          <Link to="/signup"><button className="px-4 py-2 rounded border border-blue-600 bg-blue-600 hover:bg-blue-500 transition text-white">Get Started</button></Link>
+          <Link to="/login"><button className="px-4 py-2 rounded border" style={{borderColor:'var(--panel-border)', color:'var(--text-primary)'}}>Log in</button></Link>
+        </div>
       </div>
     </div>
   )
