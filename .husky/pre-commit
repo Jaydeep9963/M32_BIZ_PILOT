@@ -1,0 +1,4 @@
+#!/bin/sh
+# Run client and server tests, not root
+cd "$(git rev-parse --show-toplevel)/server" && npm test || exit 1
+cd "$(git rev-parse --show-toplevel)/client" && npm test || exit 1
