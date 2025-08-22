@@ -137,6 +137,7 @@ function Chat() {
   const endRef = useRef<HTMLDivElement | null>(null)
   const [stickToBottom, setStickToBottom] = useState(true)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const toggleThemeLocal = () => {
     const root = document.documentElement
@@ -382,13 +383,21 @@ function Chat() {
   }, [messages, isThinking, stickToBottom])
 
   return (
-    <div className="h-screen flex flex-col app-base">
-      <nav className="flex items-center px-4 py-2 nav-gradient">
+    <div className="h-[100dvh] flex flex-col app-base overflow-hidden">
+      <nav className="flex items-center px-4 py-2 nav-gradient sticky top-0 z-20">
         <Link to="/" onClick={(e)=>{ if (isAuthed) e.preventDefault(); }} className="flex flex-col leading-tight" style={{color:'var(--text-primary)'}}>
           <span className="font-semibold text-xl">BizPilot</span>
           <span className="text-xs opacity-80">AI business copilot for SMBs</span>
         </Link>
         <div className="flex-1" />
+        <button
+          className="mr-2 px-3 py-2 rounded border border-white/20 hover:bg-white/10 transition md:hidden"
+          onClick={() => setIsSidebarOpen(true)}
+          aria-label="Open conversations"
+          title="Open conversations"
+        >
+          ☰
+        </button>
         <button
           className="mr-2 px-3 py-2 rounded border border-white/20 hover:bg-white/10 transition"
           onClick={toggleThemeLocal}
@@ -399,8 +408,41 @@ function Chat() {
         </button>
         <button className="px-4 py-2 rounded btn-primary" onClick={() => { logout(); nav('/login'); }}>Logout</button>
       </nav>
-      <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-[260px_1fr] gap-3">
-        <aside className="hidden md:block border-r border-zinc-800 p-3 overflow-auto" style={{background:'var(--panel-bg)'}}>
+      {/* Mobile conversations drawer */}
+      {isSidebarOpen && (
+        <div className="fixed inset-0 z-40 md:hidden" role="dialog" aria-modal="true">
+          <button className="absolute inset-0 bg-black/40" aria-label="Close" onClick={() => setIsSidebarOpen(false)} />
+          <div className="absolute left-0 top-0 bottom-0 w-[82vw] max-w-xs p-3 overflow-auto" style={{background:'var(--panel-bg)', borderRight: '1px solid var(--panel-border)'}}>
+            <div className="flex items-center justify-between mb-2">
+              <b style={{color:'var(--text-primary)'}}>Conversations</b>
+              <button className="px-2 py-1 rounded border" onClick={createNewChat}>New</button>
+            </div>
+            <div className="flex flex-col">
+              {chats.map(c => {
+                const isActive = chatId === c._id
+                return (
+                  <div key={c._id} className={`flex items-center gap-2 px-2 py-2 border-b`} style={{borderColor:'var(--panel-border)', background: isActive ? 'rgba(37,99,235,0.08)' : 'transparent'}}>
+                    <div className="flex-1 min-w-0">
+                      <button onClick={()=>{ openChat(c._id); setIsSidebarOpen(false) }} className="text-left w-full truncate" style={{color:'var(--text-primary)'}}>
+                        {c.title || 'Untitled'}
+                      </button>
+                      <div className="text-[10px] opacity-70" style={{color:'var(--text-primary)'}}>{c.updatedAt ? new Date(c.updatedAt).toLocaleString() : ''}</div>
+                    </div>
+                    <button className="p-1 rounded border" onClick={()=>deleteChat(c._id)} aria-label="Delete" title="Delete">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                    </button>
+                  </div>
+                )
+              })}
+            </div>
+            <div className="mt-3">
+              <button className="w-full px-3 py-2 rounded border" onClick={() => setIsSidebarOpen(false)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-[260px_1fr] gap-3 overflow-hidden">
+        <aside className="hidden md:block border-r border-zinc-800 p-3" style={{background:'var(--panel-bg)'}}>
           <div className="flex items-center justify-between mb-2">
             <b style={{color:'var(--text-primary)'}}>Conversations</b>
             <button className="px-2 py-1 rounded border" onClick={createNewChat}>New</button>
@@ -424,8 +466,8 @@ function Chat() {
             })}
           </div>
         </aside>
-        <div className="flex flex-col min-h-0">
-          <div ref={scrollContainerRef} className="flex-1 overflow-auto min-h-0 p-4 flex flex-col gap-2">
+        <div className="flex flex-col min-h-0 overflow-hidden">
+          <div ref={scrollContainerRef} className="flex-1 overflow-auto min-h-0 p-4 pb-24 flex flex-col gap-2">
             {messages.map((m, idx) => (
               <div key={idx} className="flex gap-2">
                 <div className="w-24 opacity-70 capitalize text-xs shrink-0" style={{color:'var(--text-primary)'}}>{m.role}
@@ -452,6 +494,15 @@ function Chat() {
                 </div>
               </div>
             ))}
+            {messages.length === 0 && !isThinking && (
+              <div className="flex flex-col items-center justify-center text-center py-8">
+                <div className="text-sm opacity-80" style={{color:'var(--text-primary)'}}>No conversation selected.</div>
+                <div className="mt-3 flex gap-2">
+                  <button className="px-3 py-2 rounded btn-primary" onClick={createNewChat}>Start new chat</button>
+                  <button className="px-3 py-2 rounded border md:hidden" onClick={()=>setIsSidebarOpen(true)} style={{borderColor:'var(--panel-border)', color:'var(--text-primary)'}}>Open conversations</button>
+                </div>
+              </div>
+            )}
             {/* Global fallback loader when no assistant placeholder yet */}
             {isThinking && !(messages[messages.length-1]?.role === 'assistant' && (messages[messages.length-1]?.content ?? '') === '') && (
               <div className="flex gap-2">
@@ -466,7 +517,7 @@ function Chat() {
             )}
             <div ref={endRef} />
           </div>
-          <div className="flex gap-2 p-3 composer">
+          <div className="flex gap-2 p-3 composer pb-[env(safe-area-inset-bottom)] sticky bottom-0 z-10">
             <textarea className="textbox" value={input} onChange={e=>setInput(e.target.value)} placeholder="Type your message..." onKeyDown={e=>{ if(e.key==='Enter' && !e.shiftKey) { e.preventDefault(); send(); } }} />
             <button className="px-4 py-2 rounded btn-primary disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2" onClick={send} disabled={isThinking}>
               {isThinking && <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
