@@ -245,6 +245,11 @@ function Chat() {
     // Optimistic append of user message
     const optimistic: Message[] = [...messages, { role: 'user' as const, content: input }]
     setMessages(optimistic)
+    // Ensure we snap to the bottom when user sends
+    setStickToBottom(true)
+    requestAnimationFrame(() => {
+      endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    })
     setInput('')
     setIsThinking(true)
     try {
