@@ -43,6 +43,8 @@ jobs:
             echo "[Deploy] Using APP_DIR=$APP_DIR"
 
             cd "$APP_DIR/server"
+            # Ensure devDependencies (like typescript) are installed for build
+            export NPM_CONFIG_PRODUCTION=false
             npm ci
             npm run build
             npm prune --production || true
